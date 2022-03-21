@@ -19,6 +19,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private String item;
         
     /**
      * Create the game and initialise its internal map.
@@ -34,30 +35,78 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
-      
+        Room engineRoom, garage, office, bedroom, lounge, kitchen, study, livingRoom, diningRoom, exit, wallRoom;
+        item wallKey;
+        
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        engineRoom = new Room("You've reached the engine room. The room in the back right of the building," 
+        + " very noticably under the weather.");
+        
+        garage = new Room("You found where the cars should be. It's been empty for years it seems, the garage door is"
+        + " starting to fall apart.");
+        
+        office = new Room("You enter a worn down office with newspapers from the 1800s" 
+        + " scattered aimlessly.");
+        
+        bedroom = new Room("A bedroom with an oddly cosy looking bed. Don't trust it, though.");
+        
+        lounge = new Room("You find yourself in the lounge. You could sleep on the couch bed but who knows what"
+        + " was there.");
+        
+        kitchen = new Room("An old kitchen. Look around and you might find "
+        + "some nicely aged cheese.");
+        
+        study = new Room("A common study. Except for the abandoned part, as well as that crack in the wall...");
+        
+        livingRoom = new Room("The door to the living room you entered seems to have lost it's hinges."
+        + "Old portraits hang on the wall. Wonder who  they were.");
+        diningRoom = new Room("You see an old table with chairs falling apart" 
+        + " around it.");
+        
+        exit = new Room("You've finally made it out. Good Going!");
+        
+        wallRoom = new Room("You've found the secret room hidden in the walls..."
+        + " And you look on the ground and think you found a way out."); 
+        
+        wallKey = new item();
         
         // initialise room exits
-        outside.setExit("east", theater);
-        outside.setExit("south", lab);
-        outside.setExit("west", pub);
+        engineRoom.setExit("south", garage);
 
-        theater.setExit("west", outside);
+        garage.setExit("east", lounge);
+        garage.setExit("north", engineRoom);
 
-        pub.setExit("east", outside);
+        office.setExit("east", bedroom);
 
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
+        bedroom.setExit("south", livingRoom);
+        bedroom.setExit("west", office);
 
-        office.setExit("west", lab);
+        lounge.setExit("west", garage);
+        lounge.setExit("south", diningRoom);
+        lounge.setExit("east", livingRoom);
 
-        currentRoom = outside;  // start game outside
+        kitchen.setExit("north", livingRoom);
+        kitchen.setExit("west", diningRoom);
+        
+        study.setExit("east", diningRoom);
+        study.setExit("crack", wallRoom);
+
+        livingRoom.setExit("north", bedroom);
+        livingRoom.setExit("south", kitchen);
+        livingRoom.setExit("west", lounge);
+        //if ()
+        //{
+        livingRoom.setExit("east", exit);
+        //}
+        
+        diningRoom.setExit("north", lounge);
+        diningRoom.setExit("east", kitchen);
+        diningRoom.setExit("west", study);
+        
+        wallRoom.setExit("crack", study);
+        wallRoom.setItem("Key", wallKey); 
+        
+        currentRoom = lounge;  // start game outside
     }
 
     /**
@@ -84,9 +133,9 @@ public class Game
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
-        System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
+        System.out.println("Welcome to the Hounted house of ooooOOOOOO0000 scary ghosts!");
+        System.out.println("Hounted house of ooooOOOOOO0000 scary ghosts is a new, incredibly rudimantary adventure game.");
+        System.out.println("Type 'help' if you ever need help, like a simpleton.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
     }
@@ -114,7 +163,11 @@ public class Game
             case GO:
                 goRoom(command);
                 break;
-
+                
+            case TAKE:
+                setItem(item);
+                break;
+                
             case QUIT:
                 wantToQuit = quit(command);
                 break;
@@ -164,6 +217,12 @@ public class Game
         }
     }
 
+    public void setItem(String Item)
+    {
+        this.item = Item;
+        
+    }
+    
     /** 
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.

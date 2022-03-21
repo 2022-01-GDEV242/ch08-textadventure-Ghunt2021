@@ -20,6 +20,8 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
+    private String item;
+    private ArrayList<String> inventory;
 
     /**
      * Create a room described "description". Initially, it has
@@ -78,6 +80,12 @@ public class Room
         return returnString;
     }
 
+    public void setItem(String Item)
+    {
+        this.item = Item;
+        
+    }
+    
     /**
      * Return the room that is reached if we go from this room in direction
      * "direction". If there is no room in that direction, return null.
