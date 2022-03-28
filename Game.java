@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -20,7 +23,8 @@ public class Game
     private Parser parser;
     private Room currentRoom;
     private String item;
-        
+    List<String> inv = new ArrayList<String>();
+    
     /**
      * Create the game and initialise its internal map.
      */
@@ -36,7 +40,6 @@ public class Game
     private void createRooms()
     {
         Room engineRoom, garage, office, bedroom, lounge, kitchen, study, livingRoom, diningRoom, exit, wallRoom;
-        item wallKey;
         
         // create the rooms
         engineRoom = new Room("You've reached the engine room. The room in the back right of the building," 
@@ -63,12 +66,11 @@ public class Game
         diningRoom = new Room("You see an old table with chairs falling apart" 
         + " around it.");
         
-        exit = new Room("You've finally made it out. Good Going!");
+        exit = new Room("You've finally made it out. Good Going! Type 'restart' to restart the game, or type 'quit'; to quit.");
         
         wallRoom = new Room("You've found the secret room hidden in the walls..."
         + " And you look on the ground and think you found a way out."); 
         
-        wallKey = new item();
         
         // initialise room exits
         engineRoom.setExit("south", garage);
@@ -98,14 +100,14 @@ public class Game
         //{
         livingRoom.setExit("east", exit);
         //}
+        //if ()
         
         diningRoom.setExit("north", lounge);
         diningRoom.setExit("east", kitchen);
         diningRoom.setExit("west", study);
         
         wallRoom.setExit("crack", study);
-        wallRoom.setItem("Key", wallKey); 
-        
+
         currentRoom = lounge;  // start game outside
     }
 
@@ -165,11 +167,18 @@ public class Game
                 break;
                 
             case TAKE:
-                setItem(item);
                 break;
                 
             case QUIT:
                 wantToQuit = quit(command);
+                break;
+                
+            case INV:    
+                System.out.println(inv);
+                break;
+                
+            case RESTART:
+                new Game();
                 break;
         }
         return wantToQuit;
@@ -191,6 +200,11 @@ public class Game
         parser.showCommands();
     }
 
+    public void inventory()
+    {
+    
+    }
+    
     /** 
      * Try to go in one direction. If there is an exit, enter the new
      * room, otherwise print an error message.
@@ -220,7 +234,6 @@ public class Game
     public void setItem(String Item)
     {
         this.item = Item;
-        
     }
     
     /** 

@@ -9,7 +9,7 @@ public enum CommandWord
 {
     // A value for each command word along with its
     // corresponding user interface string.
-    GO("go"), QUIT("quit"), HELP("help"), UNKNOWN("?"), TAKE("take"), INVENTORY("inventory");
+    GO("go"), QUIT("quit"), HELP("help"), UNKNOWN("?"), TAKE("take"), INV("inventory"), RESTART("restart");
     
     // The command string.
     private String commandString;
