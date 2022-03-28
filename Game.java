@@ -44,7 +44,7 @@ public class Game
      */
     private void createRooms()
     {
-        Room engineRoom, garage, office, bedroom, lounge, kitchen, study, livingRoom, diningRoom, exit, wallRoom;
+        Room engineRoom, garage, office, bedroom, lounge, kitchen, study, livingRoom, diningRoom, exit, wallRoom, basementStairs, basement, cellar, attic;
         
         // create the rooms
         engineRoom = new Room("You've reached the engine room. The room in the back right of the building," 
@@ -81,6 +81,14 @@ public class Game
         + " And you look on the ground and think you found a way out."); 
         this.wallRoom = wallRoom;
         
+        basementStairs = new Room("The stairs creak as you stand on them, and there's candlewax on the stairs.");
+        
+        basement = new Room("You can barely see. You hear the footsteps on the ground and faint breathing, but you are barely sure if it's you who's making those sounds.");
+        
+        cellar = new Room("You smell well-aged beer and hear drips from the taps. Maybe it's best to just drink all the beer and hope you too drunk to be afraid.");
+        
+        attic = new Room("You arrive in the attic. You see a painting of a door taunting you on the wall. Light comes through the ceiling, but you are unsure if you can escape from it.");
+        
         // initialise room exits
         engineRoom.setExit("south", garage);
 
@@ -98,6 +106,7 @@ public class Game
 
         kitchen.setExit("north", livingRoom);
         kitchen.setExit("west", diningRoom);
+        kitchen.setExit("south", basementStairs);
         
         study.setExit("east", diningRoom);
         study.setExit("crack", wallRoom);
@@ -115,7 +124,20 @@ public class Game
         diningRoom.setExit("west", study);
         
         wallRoom.setExit("crack", study);
+        
+        basementStairs.setExit("south", basement);
+        basementStairs.setExit("north", kitchen);
 
+        basement.setExit("north", basementStairs);
+        basement.setExit("east", cellar);
+
+        cellar.setExit("west", basement);
+        
+        
+        
+        
+        
+        
         currentRoom = lounge;  // start game outside
     }
 
