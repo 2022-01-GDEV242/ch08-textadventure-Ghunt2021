@@ -24,6 +24,11 @@ public class Game
     private Room currentRoom;
     private String item;
     List<String> inv = new ArrayList<String>();
+    public boolean Key = false;
+    Room livingRoom;
+    Room wallRoom;
+    Room kitchen;
+    Room engineRoom;
     
     /**
      * Create the game and initialise its internal map.
@@ -44,6 +49,7 @@ public class Game
         // create the rooms
         engineRoom = new Room("You've reached the engine room. The room in the back right of the building," 
         + " very noticably under the weather.");
+        this.engineRoom = engineRoom;
         
         garage = new Room("You found where the cars should be. It's been empty for years it seems, the garage door is"
         + " starting to fall apart.");
@@ -58,11 +64,14 @@ public class Game
         
         kitchen = new Room("An old kitchen. Look around and you might find "
         + "some nicely aged cheese.");
+        this.kitchen = kitchen;
         
         study = new Room("A common study. Except for the abandoned part, as well as that crack in the wall...");
         
         livingRoom = new Room("The door to the living room you entered seems to have lost it's hinges."
         + "Old portraits hang on the wall. Wonder who  they were.");
+        this.livingRoom = livingRoom;
+        
         diningRoom = new Room("You see an old table with chairs falling apart" 
         + " around it.");
         
@@ -70,7 +79,7 @@ public class Game
         
         wallRoom = new Room("You've found the secret room hidden in the walls..."
         + " And you look on the ground and think you found a way out."); 
-        
+        this.wallRoom = wallRoom;
         
         // initialise room exits
         engineRoom.setExit("south", garage);
@@ -100,7 +109,6 @@ public class Game
         //{
         livingRoom.setExit("east", exit);
         //}
-        //if ()
         
         diningRoom.setExit("north", lounge);
         diningRoom.setExit("east", kitchen);
@@ -167,6 +175,7 @@ public class Game
                 break;
                 
             case TAKE:
+                goTake();
                 break;
                 
             case QUIT:
@@ -194,7 +203,7 @@ public class Game
     private void printHelp() 
     {
         System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
+        System.out.println("around at the home.");
         System.out.println();
         System.out.println("Your command words are:");
         parser.showCommands();
@@ -203,6 +212,28 @@ public class Game
     public void inventory()
     {
     
+    }
+    
+    public void goTake()
+    {
+        if (currentRoom == wallRoom){
+            Key = true;
+            inv.add("Door Key");
+            System.out.println("I think I might have found the way out of here.");
+        }
+        else if (currentRoom == kitchen){
+            
+            inv.add("Ancient Cheese");
+            System.out.println("Hey, at least it's exquisite in taste... I guess.");
+        }
+        else if (currentRoom == engineRoom) {
+            
+            inv.add("Oil");
+            System.out.println("You've found some oil! Wonder if we'll need it");
+        }
+        else {
+        System.out.println("There is nothing to take here!");
+        }
     }
     
     /** 
@@ -227,6 +258,15 @@ public class Game
         }
         else {
             currentRoom = nextRoom;
+            
+        if(livingRoom && Key == true)
+        {
+            currentRoom = nextRoom;
+        }
+            
+        else{
+            
+        }
             System.out.println(currentRoom.getLongDescription());
         }
     }

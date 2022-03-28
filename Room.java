@@ -22,8 +22,6 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
-    private String itemDescription;
-    
     List<String> inv = new ArrayList<String>();
 
     /**
