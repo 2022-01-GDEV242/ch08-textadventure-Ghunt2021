@@ -281,14 +281,19 @@ public class Game
         else {
             currentRoom = nextRoom;
             
-        if(livingRoom && Key == true)
-        {
-            currentRoom = nextRoom;
-        }
+            if(livingRoom == currentRoom)
+            {
+                //do what we need to do when in special for living room 
+                if (Key == true) {
+                    // print that you take the key and unlock the door
+                    // add the exit to east
+                }
+                else {
+                 // print the door is locked but you have no key   
+                }
+            }   
+               // do what we do for every room
             
-        else{
-            
-        }
             System.out.println(currentRoom.getLongDescription());
         }
     }
