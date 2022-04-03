@@ -69,7 +69,7 @@ public class Game
         study = new Room("A common study. Except for the abandoned part, as well as that crack in the wall...");
         
         livingRoom = new Room("The door to the living room you entered seems to have lost it's hinges."
-        + "Old portraits hang on the wall. Wonder who  they were.");
+        + "There appears to be the exit to your left, but it's locked.");
         this.livingRoom = livingRoom;
         
         diningRoom = new Room("You see an old table with chairs falling apart" 
@@ -83,11 +83,11 @@ public class Game
         
         basementStairs = new Room("The stairs creak as you stand on them, and there's candlewax on the stairs.");
         
-        basement = new Room("You can barely see. You hear the footsteps on the ground and faint breathing, but you are barely sure if it's you who's making those sounds.");
+        basement = new Room("You can barely see, but you can see those wide pipes... \n Maybe you can crawl in one?");
         
-        cellar = new Room("You smell well-aged beer and hear drips from the taps. Maybe it's best to just drink all the beer and hope you too drunk to be afraid.");
+        cellar = new Room("You smell well-aged beer and hear drips from the taps.\n Maybe it's best to just drink all the beer and hope you too drunk to be afraid.");
         
-        attic = new Room("You arrive in the attic. You see a painting of a door taunting you on the wall. Light comes through the ceiling, but you are unsure if you can escape from it.");
+        attic = new Room("You arrive in the attic. You see a painting of a door taunting you on the wall. \n Light comes through the ceiling, but you are unsure if you can escape from it.");
         
         // initialise room exits
         engineRoom.setExit("south", garage);
@@ -99,6 +99,7 @@ public class Game
 
         bedroom.setExit("south", livingRoom);
         bedroom.setExit("west", office);
+        bedroom.setExit("north", attic);
 
         lounge.setExit("west", garage);
         lounge.setExit("south", diningRoom);
@@ -114,10 +115,11 @@ public class Game
         livingRoom.setExit("north", bedroom);
         livingRoom.setExit("south", kitchen);
         livingRoom.setExit("west", lounge);
-        //if ()
-        //{
+        
+        if (Key == true)
+        {
         livingRoom.setExit("east", exit);
-        //}
+        }
         
         diningRoom.setExit("north", lounge);
         diningRoom.setExit("east", kitchen);
@@ -130,13 +132,11 @@ public class Game
 
         basement.setExit("north", basementStairs);
         basement.setExit("east", cellar);
+        basement.setExit("pipes", engineRoom);
 
         cellar.setExit("west", basement);
         
-        
-        
-        
-        
+        attic.setExit("south", bedroom);
         
         currentRoom = lounge;  // start game outside
     }
