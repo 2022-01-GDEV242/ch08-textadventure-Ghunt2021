@@ -29,6 +29,11 @@ public class Game
     Room wallRoom;
     Room kitchen;
     Room engineRoom;
+    Room cellar;
+    Room office;
+    Room attic;
+    public int totalScore;
+    public int pointsAdded;
     
     /**
      * Create the game and initialise its internal map.
@@ -45,7 +50,7 @@ public class Game
     private void createRooms()
     {
         Room engineRoom, garage, office, bedroom, lounge, kitchen, study, livingRoom, diningRoom, exit, wallRoom, basementStairs, basement, cellar, attic;
-        
+
         // create the rooms
         engineRoom = new Room("You've reached the engine room. The room in the back right of the building," 
         + " very noticably under the weather.");
@@ -56,6 +61,7 @@ public class Game
         
         office = new Room("You enter a worn down office with newspapers from the 1800s" 
         + " scattered aimlessly.");
+        this.office = office;
         
         bedroom = new Room("A bedroom with an oddly cosy looking bed. Don't trust it, though.");
         
@@ -86,8 +92,10 @@ public class Game
         basement = new Room("You can barely see, but you can see those wide pipes... \n Maybe you can crawl in one?");
         
         cellar = new Room("You smell well-aged beer and hear drips from the taps.\n Maybe it's best to just drink all the beer and hope you too drunk to be afraid.");
+        this.cellar = cellar;
         
         attic = new Room("You arrive in the attic. You see a painting of a door taunting you on the wall. \n Light comes through the ceiling, but you are unsure if you can escape from it.");
+        this.attic = attic;
         
         // initialise room exits
         engineRoom.setExit("south", garage);
@@ -116,10 +124,6 @@ public class Game
         livingRoom.setExit("south", kitchen);
         livingRoom.setExit("west", lounge);
         
-        if (Key == true)
-        {
-        livingRoom.setExit("east", exit);
-        }
         
         diningRoom.setExit("north", lounge);
         diningRoom.setExit("east", kitchen);
@@ -180,7 +184,7 @@ public class Game
     private boolean processCommand(Command command) 
     {
         boolean wantToQuit = false;
-
+        
         CommandWord commandWord = command.getCommandWord();
 
         switch (commandWord) {
@@ -207,10 +211,6 @@ public class Game
             case INV:    
                 System.out.println(inv);
                 break;
-                
-            case RESTART:
-                new Game();
-                break;
         }
         return wantToQuit;
     }
@@ -225,10 +225,11 @@ public class Game
     private void printHelp() 
     {
         System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the home.");
+        System.out.println("around the home.");
         System.out.println();
         System.out.println("Your command words are:");
         parser.showCommands();
+        System.out.println("Hope this helps!");        
     }
 
     public void inventory()
@@ -237,22 +238,41 @@ public class Game
     }
     
     public void goTake()
-    {
+    {   
+        
         if (currentRoom == wallRoom){
+            pointsAdded = pointsAdded + 125;
             Key = true;
             inv.add("Door Key");
             System.out.println("I think I might have found the way out of here.");
         }
         else if (currentRoom == kitchen){
-            
+            pointsAdded = pointsAdded + 100;
             inv.add("Ancient Cheese");
             System.out.println("Hey, at least it's exquisite in taste... I guess.");
         }
         else if (currentRoom == engineRoom) {
-            
+            pointsAdded = pointsAdded + 75;
             inv.add("Oil");
-            System.out.println("You've found some oil! Wonder if we'll need it");
+            System.out.println("You've found some oil! Wonder if we'll need it.");
         }
+        else if (currentRoom == cellar) {
+            pointsAdded = pointsAdded + 50;
+            inv.add("Beer Barrel");
+            System.out.println("Simply intoxicating!");
+        }        
+        else if (currentRoom == office) {
+            pointsAdded = pointsAdded + 75;
+            inv.add("Antique Newsaper");
+            System.out.println("If the newspaper is to be believed we just" 
+            + " won the Civil War.");
+        }     
+        else if (currentRoom == attic) {
+            pointsAdded = pointsAdded + 10;
+            inv.add("Creepy Painting");
+            System.out.println("A painting gauranteed to lower the property value of" 
+             + " any neighborhood it resides on.");
+        }        
         else {
         System.out.println("There is nothing to take here!");
         }
@@ -262,19 +282,26 @@ public class Game
      * Try to go in one direction. If there is an exit, enter the new
      * room, otherwise print an error message.
      */
-    private void goRoom(Command command) 
+    public void goRoom(Command command) 
     {
         if(!command.hasSecondWord()) {
             // if there is no second word, we don't know where to go...
             System.out.println("Go where?");
             return;
         }
-
+        int totalScore = getScore();
+        
+        int i = 0; //tracks room changes
+        
         String direction = command.getSecondWord();
 
         // Try to leave current room.
         Room nextRoom = currentRoom.getExit(direction);
 
+        Room exit; //initialize Exit
+        exit = new Room("You've finally made it out. Good Going! Type  'quit' to quit the game." 
+         + "\nYour Score is: " + totalScore + " points.");
+        
         if (nextRoom == null) {
             System.out.println("There is no door!");
         }
@@ -285,14 +312,19 @@ public class Game
             {
                 //do what we need to do when in special for living room 
                 if (Key == true) {
-                    // print that you take the key and unlock the door
-                    // add the exit to east
-                }
+                    System.out.println("\nGood thing you found a key earlier...");
+                    livingRoom.setExit("east", exit);
+                    pointsAdded = pointsAdded + i * -5; //Subtract points so it's harder to grind for them
+                }   
                 else {
-                 // print the door is locked but you have no key   
+                
                 }
             }   
                // do what we do for every room
+            currentRoom = nextRoom;
+            
+            pointsAdded = pointsAdded + 10; //Add points for exploring
+            i++;
             
             System.out.println(currentRoom.getLongDescription());
         }
@@ -301,6 +333,14 @@ public class Game
     public void setItem(String Item)
     {
         this.item = Item;
+    }
+    
+    public int getScore()
+    {
+    int score;
+    score = 0;
+    score = pointsAdded;
+    return score;
     }
     
     /** 
